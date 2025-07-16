@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 
 class RootSchema(BaseModel):
-    id: int
     name: str
     path: str
 

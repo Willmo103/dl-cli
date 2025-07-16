@@ -37,3 +37,16 @@ class RootFolderModel(Base):
     last_modified = Column(DateTime, nullable=False)
     created_at = Column(DateTime, nullable=False)
 
+
+class SourceCodeRoot(Base):
+    """ Represents a source code root directory in the database. """
+    __tablename__ = 'source_code_roots'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    scan_root_id = Column(Integer, ForeignKey('roots.id'), nullable=False)
+    scan_root_folder_id = Column(Integer, ForeignKey('root_folders.id'), nullable=False)
+    name = Column(String, nullable=False)
+    language = Column(String, nullable=False)
+    full_path = Column(String, unique=True, nullable=False)
+    git_path = Column(String, nullable=True)
+    file_count = Column(Integer, nullable=False)
+    folder_count = Column(Integer, nullable=False)
