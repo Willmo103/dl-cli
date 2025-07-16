@@ -50,3 +50,4 @@ class SourceCodeRoot(Base):
     git_path = Column(String, nullable=True)
     file_count = Column(Integer, nullable=False)
     folder_count = Column(Integer, nullable=False)
+
