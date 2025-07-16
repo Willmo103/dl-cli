@@ -9,6 +9,7 @@ class RootModel(Base):
     """ Represents a root directory in the database. """
     __tablename__ = 'roots'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
     path = Column(String, unique=True, nullable=False)
 
 
