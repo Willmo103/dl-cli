@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class RootSchema(BaseModel):
     name: str
     path: str
@@ -20,6 +21,7 @@ class RootFileSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class RootFolderSchema(BaseModel):
     id: int
