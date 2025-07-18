@@ -1,7 +1,10 @@
+import datetime
+from typing import Any
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
-Base: declarative_base = declarative_base()
+
+Base: Any = declarative_base()
 
 
 class RootModel(Base):
@@ -9,8 +12,21 @@ class RootModel(Base):
 
     __tablename__ = "roots"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
+    # Added unique=True for name consistency
+    name = Column(String, nullable=False, unique=True)
     path = Column(String, unique=True, nullable=False)
+    # Auto-set creation time
+    created_at = Column(
+        DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc)
+    )
+
+    def __repr__(self):
+        return f"<Root(id={self.id}, name='{self.name}', path='{self.path}')>"
+
 
 class RootFileModel(Base):
     """Represents a file in a root directory."""
@@ -22,8 +38,15 @@ class RootFileModel(Base):
     name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
     size = Column(Integer, nullable=False)
-    last_modified = Column(DateTime, nullable=False)
-    created_at = Column(DateTime, nullable=False)
+    file_last_modified = Column(DateTime, nullable=False)
+    file_created_at = Column(DateTime, nullable=False)
+    created_at = Column(
+        DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc)
+    )
 
 
 class RootFolderModel(Base):
@@ -35,34 +58,19 @@ class RootFolderModel(Base):
     full_path = Column(String, nullable=False)
     name = Column(String, nullable=False)
     size = Column(Integer, nullable=False)
-    last_modified = Column(DateTime, nullable=False)
-    created_at = Column(DateTime, nullable=False)
+    folder_last_modified = Column(DateTime, nullable=False)
+    folder_created_at = Column(DateTime, nullable=False)
+    created_at = Column(
+        DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc)
+    )
 
 
-class FolderToProjectTable(Base):
-    """Represents the association between folders and projects."""
-
-    __tablename__ = "folder_to_project"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    folder_id = Column(Integer, ForeignKey("root_folders.id"), nullable=False)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-
-
-class FilesToProjectTable(Base):
-    """Represents the association between files and projects."""
-
-    __tablename__ = "file_to_project"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    file_id = Column(Integer, ForeignKey("root_files.id"), nullable=False)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-
-
-class ProjectModel(Base):
-    """Represents a project in the database."""
-
-    __tablename__ = "projects"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    created_at = Column(DateTime, nullable=False)
-    updated_at = Column(DateTime, nullable=False)
+__all__ = [
+    "RootModel",
+    "RootFileModel",
+    "RootFolderModel",
+]

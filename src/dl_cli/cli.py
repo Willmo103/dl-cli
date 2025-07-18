@@ -1,6 +1,7 @@
 import typer
 
-from dl_cli.root_manager import RootManager
+from dl_cli.root_manager import app
+
 
 cli = typer.Typer(
     name="utils",
@@ -8,7 +9,6 @@ cli = typer.Typer(
 )
 
 
-@cli.add_typer(RootManager.app, name="root", help="Manage root directories.")
 def entrypoint():
     """Main entry point for the CLI."""
     cli()
